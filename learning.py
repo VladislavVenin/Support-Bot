@@ -1,9 +1,49 @@
 import argparse
 import json
 import os
+from pprint import pprint
 
 from google.cloud import dialogflow
+from google.api_core.exceptions import InvalidArgument
 from dotenv import load_dotenv
+
+
+def convert_to_str(input_value):
+    if type(input_value) is list:
+        converted = [str(element) for element in input_value]
+    else:
+        converted = str(input_value)
+    return converted
+
+
+def add_to_list(input_value):
+    if type(input_value) is not list:
+        return [input_value]
+    return input_value
+
+
+def list_intents(project_id):
+    client = dialogflow.IntentsClient()
+    parent = dialogflow.AgentsClient.agent_path(project_id)
+
+    intents = client.list_intents(parent=parent)
+
+    intents_ids = {}
+    for intent in intents:
+        intents_ids[f"{intent.display_name}"] = os.path.basename(intent.name)
+    return intents_ids
+
+
+def delete_intent(project_id, intent_id):
+    """Delete intent with the given intent type and intent value."""
+    from google.cloud import dialogflow
+
+    intents_client = dialogflow.IntentsClient()
+
+    intent_path = intents_client.intent_path(project_id, intent_id)
+
+    intents_client.delete_intent(request={"name": intent_path})
+
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
@@ -39,6 +79,11 @@ def main():
         help="Путь до файла с тренировочными фразами",
         default="./questions.json"
     )
+    parser.add_argument(
+        '-r', '--rewrite',
+        action="store_true",
+        help="Перезаписать существующие записи",
+    )
     args = parser.parse_args()
 
     load_dotenv()
@@ -49,14 +94,30 @@ def main():
         content_json = file.read()
 
     intents = json.loads(content_json)
-
+    if args.rewrite:
+        intents_ids = list_intents(project_id)
     for intent, phrases in intents.items():
-        create_intent(
-            project_id,
-            intent,
-            phrases["questions"],
-            [phrases["answer"]]
-        )
+        questions = convert_to_str(phrases["questions"])
+        answers = convert_to_str(phrases["answer"])
+
+        questions = add_to_list(questions)
+        answers = add_to_list(answers)
+
+        try:
+            create_intent(
+                project_id,
+                intent,
+                questions,
+                answers
+            )
+        except InvalidArgument as e:
+            if args.rewrite:
+                intent_id = intents_ids.get(intent)
+                delete_intent(project_id, intent_id)
+                create_intent(project_id, intent, questions, answers)
+            else:
+                print(e)
+                continue
 
 
 if __name__ == '__main__':
