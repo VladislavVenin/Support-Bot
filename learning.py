@@ -1,7 +1,6 @@
 import argparse
 import json
 import os
-from pprint import pprint
 
 from google.cloud import dialogflow
 from google.api_core.exceptions import InvalidArgument
@@ -9,6 +8,7 @@ from dotenv import load_dotenv
 
 
 def convert_to_str(input_value):
+    """Convert nonstr elements to str"""
     if type(input_value) is list:
         converted = [str(element) for element in input_value]
     else:
@@ -17,12 +17,14 @@ def convert_to_str(input_value):
 
 
 def add_to_list(input_value):
+    """add non list vars to list"""
     if type(input_value) is not list:
         return [input_value]
     return input_value
 
 
 def list_intents(project_id):
+    """Create list of existing intents with ids"""
     client = dialogflow.IntentsClient()
     parent = dialogflow.AgentsClient.agent_path(project_id)
 
@@ -45,8 +47,8 @@ def delete_intent(project_id, intent_id):
     intents_client.delete_intent(request={"name": intent_path})
 
 
-
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
+    """Create new intent"""
     intents_client = dialogflow.IntentsClient()
 
     parent = dialogflow.AgentsClient.agent_path(project_id)
