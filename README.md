@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 - [Создайте проект в DialogFlow](https://cloud.google.com/dialogflow/docs/quick/setup)
 - [Создайте агента](https://cloud.google.com/dialogflow/docs/quick/build-agent)
-- Натренируйте агента через скрипт `learning.py` или вручную, через вкладку `Intents`
+- Натренируйте агента через скрипт [`learning.py`](https://github.com/VladislavVenin/Support-Bot/blob/main/README.md#learningpy) или вручную, через вкладку `Intents`
 - [Создайте токен](https://docs.cloud.google.com/docs/authentication/api-keys)
 
 ### Переменные окружения
