@@ -17,13 +17,13 @@ def convert_to_str(input_value):
 
 
 def add_to_list(input_value):
-    """add non list vars to list"""
+    """Add non list vars to list"""
     if type(input_value) is not list:
         return [input_value]
     return input_value
 
 
-def list_intents(project_id):
+def create_intents_list_with_ids(project_id):
     """Create list of existing intents with ids"""
     client = dialogflow.IntentsClient()
     parent = dialogflow.AgentsClient.agent_path(project_id)
@@ -38,8 +38,6 @@ def list_intents(project_id):
 
 def delete_intent(project_id, intent_id):
     """Delete intent with the given intent type and intent value."""
-    from google.cloud import dialogflow
-
     intents_client = dialogflow.IntentsClient()
 
     intent_path = intents_client.intent_path(project_id, intent_id)
@@ -55,7 +53,6 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     training_phrases = []
     for training_phrases_part in training_phrases_parts:
         part = dialogflow.Intent.TrainingPhrase.Part(text=training_phrases_part)
-        # Here we create a new training phrase for each provided part.
         training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
         training_phrases.append(training_phrase)
     text = dialogflow.Intent.Message.Text(text=message_texts)
@@ -97,7 +94,7 @@ def main():
 
     intents = json.loads(content_json)
     if args.rewrite:
-        intents_ids = list_intents(project_id)
+        intents_ids = create_intents_list_with_ids(project_id)
     for intent, phrases in intents.items():
         questions = convert_to_str(phrases["questions"])
         answers = convert_to_str(phrases["answer"])
