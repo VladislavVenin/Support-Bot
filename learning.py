@@ -62,11 +62,9 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
         display_name=display_name, training_phrases=training_phrases, messages=[message]
     )
 
-    response = intents_client.create_intent(
+    intents_client.create_intent(
         request={"parent": parent, "intent": intent}
     )
-
-    print("Intent created: {}".format(response))
 
 
 def main():
@@ -109,11 +107,13 @@ def main():
                 questions,
                 answers
             )
+            print("Intent created: {}".format(intent))
         except InvalidArgument as e:
             if args.rewrite:
                 intent_id = intents_ids.get(intent)
                 delete_intent(project_id, intent_id)
                 create_intent(project_id, intent, questions, answers)
+                print("Intent created: {}".format(intent))
             else:
                 print(e)
                 continue
