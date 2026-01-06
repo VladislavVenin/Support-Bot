@@ -84,7 +84,7 @@ def main():
     args = parser.parse_args()
 
     load_dotenv()
-    project_id = os.getenv('PROJECT_ID')
+    project_id = os.environ.get("PROJECT_ID")
 
     path = args.path
     with open(path, 'r', encoding="UTF-8") as file:

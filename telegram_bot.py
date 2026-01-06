@@ -1,4 +1,5 @@
 import os
+from functools import partial
 
 from dotenv import load_dotenv
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters
@@ -10,20 +11,22 @@ def start(update, context):
     update.message.reply_text('Здравствуйте')
 
 
-def reply_to_message(update, context):
-    reply = dialogflow_reply(update.message.text)
+def reply_to_message(update, context, project_id):
+    reply = dialogflow_reply(update.message.text, project_id)
     if reply:
         update.message.reply_text(reply)
 
 
 def main():
     load_dotenv()
-    tg_token = os.getenv('TG_TOKEN')
+    project_id = os.environ.get('PROJECT_ID')
+    tg_token = os.environ.get('TG_TOKEN')
     updater = Updater(tg_token)
     dispatcher = updater.dispatcher
 
+    reply_to_message_with_projid = partial(reply_to_message, project_id=project_id)
     dispatcher.add_handler(CommandHandler('start', start))
-    dispatcher.add_handler(MessageHandler(Filters.text, reply_to_message))
+    dispatcher.add_handler(MessageHandler(Filters.text, reply_to_message_with_projid))
 
     updater.start_polling()
     updater.idle()

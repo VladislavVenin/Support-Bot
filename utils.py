@@ -1,10 +1,7 @@
-import os
-
 from google.cloud import dialogflow
 
 
-def dialogflow_reply(message):
-    project_id = os.getenv('PROJECT_ID')
+def dialogflow_reply(message, project_id):
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(project_id, "1")
 
