@@ -20,8 +20,8 @@ def reply_to_message(update, context, project_id):
 
 def main():
     load_dotenv()
-    project_id = os.environ.get('PROJECT_ID')
-    tg_token = os.environ.get('TG_TOKEN')
+    project_id = os.environ['PROJECT_ID']
+    tg_token = os.environ['TG_TOKEN']
     updater = Updater(tg_token)
     dispatcher = updater.dispatcher
 

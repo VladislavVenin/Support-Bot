@@ -21,8 +21,8 @@ def reply_to_message(event, vk_api, project_id):
 
 def main():
     load_dotenv()
-    project_id = os.environ.get("PROJECT_ID")
-    vk_session = vk.VkApi(token=os.environ.get("VK_TOKEN"))
+    project_id = os.environ["PROJECT_ID"]
+    vk_session = vk.VkApi(token=os.environ["VK_TOKEN"])
     vk_api = vk_session.get_api()
     longpoll = VkLongPoll(vk_session)
 

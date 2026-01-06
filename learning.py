@@ -84,13 +84,13 @@ def main():
     args = parser.parse_args()
 
     load_dotenv()
-    project_id = os.environ.get("PROJECT_ID")
+    project_id = os.environ["PROJECT_ID"]
 
     path = args.path
     with open(path, 'r', encoding="UTF-8") as file:
-        content_json = file.read()
+        intents_payload = file.read()
 
-    intents = json.loads(content_json)
+    intents = json.loads(intents_payload)
     if args.rewrite:
         intents_ids = create_intents_list_with_ids(project_id)
     for intent, phrases in intents.items():
