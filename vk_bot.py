@@ -9,10 +9,11 @@ from utils import dialogflow_reply
 
 
 def reply_to_message(event, vk_api, project_id):
-    reply = dialogflow_reply(event.text, project_id)
+    user_id = event.user_id
+    reply = dialogflow_reply(event.text, project_id, user_id)
     if reply:
         vk_api.messages.send(
-            user_id=event.user_id,
+            user_id=user_id,
             message=reply,
             random_id=random.randint(1, 1000)
         )

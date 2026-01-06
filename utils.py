@@ -1,9 +1,9 @@
 from google.cloud import dialogflow
 
 
-def dialogflow_reply(message, project_id):
+def dialogflow_reply(message, project_id, chat_id):
     session_client = dialogflow.SessionsClient()
-    session = session_client.session_path(project_id, "1")
+    session = session_client.session_path(project_id, chat_id)
 
     text_input = dialogflow.TextInput(text=message, language_code="ru")
     query_input = dialogflow.QueryInput(text=text_input)
