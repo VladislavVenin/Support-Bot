@@ -12,8 +12,8 @@ def start(update, context):
 
 
 def reply_to_message(update, context, project_id):
-    chat_id = update.effective_chat.id
-    reply = dialogflow_reply(update.message.text, project_id, chat_id)
+    session_id = f"tg-{update.effective_chat.id}"
+    reply = dialogflow_reply(update.message.text, project_id, session_id)
     if reply:
         update.message.reply_text(reply)
 

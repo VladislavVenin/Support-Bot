@@ -10,7 +10,8 @@ from utils import dialogflow_reply
 
 def reply_to_message(event, vk_api, project_id):
     user_id = event.user_id
-    reply = dialogflow_reply(event.text, project_id, user_id)
+    session_id = f"vk-{user_id}"
+    reply = dialogflow_reply(event.text, project_id, session_id)
     if reply:
         vk_api.messages.send(
             user_id=user_id,
