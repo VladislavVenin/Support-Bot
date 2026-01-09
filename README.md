@@ -1,8 +1,6 @@
 # VK/Telegram support bot
 Боты для ответов на часто задаваемые вопросы для VK и Telegram
 
-Ознакомиться с ботами "вживую" можно в [VK](https://vk.com/im/convo/-235117048) и [Telegram](https://t.me/mafwpodop_bot)
-
 Список доступных фраз можно посмотреть в файле `questions.json`
 ![browser_2026-01-03_14-05-32](https://github.com/user-attachments/assets/e98587ee-653a-44e9-85c8-186e29eb71c6)
 
